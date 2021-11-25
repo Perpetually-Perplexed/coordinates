@@ -1,0 +1,17 @@
+name: Coordinates
+version: '${version}'
+main: me.perplexed.coordinates.Main
+api-version: 1.17
+authors: [ PerpetuallyPerplexed ]
+
+commands:
+  coordinates:
+    aliases: [coords, coordinate, coord]
+    description: All the coords commands in here!
+
+
+permissions:
+  coords.use:
+    description: Use the coords plugin at all
+  coords.private:
+    description: Use private coordinates
