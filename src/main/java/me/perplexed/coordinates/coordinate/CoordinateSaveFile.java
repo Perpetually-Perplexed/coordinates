@@ -1,4 +1,4 @@
-package me.perplexed.coordinates.utils;
+package me.perplexed.coordinates.coordinate;
 
 import me.perplexed.coordinates.Main;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -21,7 +21,7 @@ public class CoordinateSaveFile {
     }
 
     public void reloadFile() {
-        if (this.configFile == null) this.configFile = new File(this.instance.getDataFolder(), "timers.yml");
+        if (this.configFile == null) this.configFile = new File(this.instance.getDataFolder(), "coordinates.yml");
 
         this.dataFile = YamlConfiguration.loadConfiguration(this.configFile);
 
@@ -42,15 +42,15 @@ public class CoordinateSaveFile {
         try {
             this.getDataConfig().save(this.configFile);
         } catch (IOException e) {
-            instance.getLogger().log(Level.SEVERE, "Could not save player Timers to " + this.configFile, e);
+            instance.getLogger().log(Level.SEVERE, "Could not save player coordinates to " + this.configFile, e);
         }
 
     }
 
     public void saveBasicConfig() {
-        if (this.configFile == null) this.configFile = new File(this.instance.getDataFolder(),"timers.yml");
+        if (this.configFile == null) this.configFile = new File(this.instance.getDataFolder(),"coordinates.yml");
         if (!this.configFile.exists()) {
-            this.instance.saveResource("timers.yml",false);
+            this.instance.saveResource("coordinates.yml",false);
         }
     }
 }
