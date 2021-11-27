@@ -1,6 +1,7 @@
 package me.perplexed.coordinates;
 
-import me.perplexed.coordinates.utils.Coordinate;
+import me.perplexed.coordinates.coordinate.Coordinate;
+import me.perplexed.coordinates.coordinate.CoordinateUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -32,7 +33,7 @@ public class MegaCommand implements TabExecutor {
 
         switch (args[0])  {
             case "list" -> {
-                for (Coordinate coord : Main.getInstance().getCoords()) {
+                for (Coordinate coord : CoordinateUtils.getCoords()) {
                     pl.sendMessage(coord.getDisplayName());
                 }
 
@@ -50,7 +51,7 @@ public class MegaCommand implements TabExecutor {
                     sb.append(" ");
                 }
 
-                if (Main.getInstance().getCoords().stream().filter(c -> c.getDisplayName().equalsIgnoreCase(sb.toString())).toList().size() != 0) {
+                if (CoordinateUtils.getCoords().stream().filter(c -> c.getDisplayName().equalsIgnoreCase(sb.toString())).toList().size() != 0) {
                     pl.sendMessage(ChatColor.RED + "A coordinate is already given this name!");
                     return true;
                 }
@@ -69,26 +70,27 @@ public class MegaCommand implements TabExecutor {
                     sb.append(" ");
                 }
 
-                if (Main.getInstance().getCoords().stream().filter(c -> c.getDisplayName().equalsIgnoreCase(sb.toString())).toList().size() == 0) {
+                if (CoordinateUtils.getCoords().stream().filter(c -> c.getDisplayName().equalsIgnoreCase(sb.toString())).toList().size() == 0) {
                     pl.sendMessage(ChatColor.RED + "No such coordinate exists!");
                     return true;
                 }
 
                 // oh is this code messy? cry about it
-                Main.getInstance().getCoords().remove(Main.getInstance().getCoords().stream().filter(c -> c.getDisplayName().equalsIgnoreCase(sb.toString())).toList().get(0));
-            }
-
-            case "private" -> {
-
+                CoordinateUtils.getCoords().remove(CoordinateUtils.getCoords().stream().filter(c -> c.getDisplayName().equalsIgnoreCase(sb.toString())).toList().get(0));
             }
 
             case "get" -> {
+                if (args.length <= 1) {
+                    pl.sendMessage(ChatColor.RED + "Which coordinate?");
+                    return true;
+                }
 
+                if (CoordinateUtils.getCoords().stream().filter(c -> c.getName().equalsIgnoreCase(args[1])).toList().size() != 0) {
+
+                }
             }
 
-            default -> {
-                sender.sendMessage(ChatColor.RED +  "That argument doesn't exist!");
-            }
+            default -> sender.sendMessage(ChatColor.RED +  "That argument doesn't exist!");
         }
 
         return true;
@@ -113,6 +115,15 @@ public class MegaCommand implements TabExecutor {
             return shortend;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("get")) {
             // todo do this :D
+            List<String> ret = new ArrayList<>();
+            List<String> choices = new ArrayList<>();
+            CoordinateUtils.getCoords().forEach(c -> choices.add(c.getName()));
+            for (String thing : choices) {
+                if (thing.toLowerCase().startsWith(args[1])) {
+                    ret.add(thing);
+                }
+            }
+            return ret;
         }
 
         return tab;
